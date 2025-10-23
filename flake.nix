@@ -10,25 +10,21 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        SHA256 = "sha256-lOIqKCSvgpVBZwUy49CeReK9e0dHWWV8hmD5BsUJlys=";
       in
       {
-        packages.svlangserver = pkgs.stdenv.mkDerivation {
+        packages.svlangserver = pkgs.buildNpmPackage {
           pname = "svlangserver";
-          version = "0.3.5";
+          version = "master";
 
           src = pkgs.fetchFromGitHub {
             owner = "imc-trading";
             repo  = "svlangserver";
-            rev   = "v0.3.5"; # example commit
-            sha256 = "sha256-CkcKyC2W6NBvxkwYDVHpBF5T2NMiiDVVwR1mftEks54="; # fill via nix-prefetch-git
+            rev = "master";
+            sha256 = "sha256-lOIqKCSvgpVBZwUy49CeReK9e0dHWWV8hmD5BsUJlys=";
           };
 
-          nativeBuildInputs = [ pkgs.nodejs ];
-
-          buildPhase = ''
-            export npm_config_cache=$PWD/.npm
-            npm install --legacy-peer-deps
-          '';
+          npmDepsHash = "sha256-7j9TE1QkqymOWKjE1tSA8n9AJ2nSyjQoDq/8jptIPwY=";
 
           installPhase = ''
             mkdir -p $out/bin
@@ -50,3 +46,6 @@
         };
       });
 }
+
+
+
