@@ -27,8 +27,13 @@
           npmDepsHash = "sha256-7j9TE1QkqymOWKjE1tSA8n9AJ2nSyjQoDq/8jptIPwY=";
 
           installPhase = ''
+            mkdir -p $out/lib/svlangserver
+            cp -r . $out/lib/svlangserver
             mkdir -p $out/bin
-            cp bin/main.js $out/bin/svlangserver
+            cat > $out/bin/svlangserver <<EOF
+            #!${pkgs.bash}/bin/bash
+            exec ${pkgs.nodejs}/bin/node $out/lib/svlangserver/bin/main.js "\$@"
+            EOF
             chmod +x $out/bin/svlangserver
           '';
 
