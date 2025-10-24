@@ -26,16 +26,36 @@
 
           npmDepsHash = "sha256-7j9TE1QkqymOWKjE1tSA8n9AJ2nSyjQoDq/8jptIPwY=";
 
+
+          buildPhase = ''
+            runHook preBuild
+
+            # Install deps and build lib/
+            npm install --legacy-peer-deps
+            npm run build || npm run prepare || true
+
+            runHook postBuild
+          '';
+
           installPhase = ''
-            mkdir -p $out/lib/svlangserver
-            cp -r . $out/lib/svlangserver
+            runHook preInstall
+
+            # Copy full built tree (preserving bin/lib layout)
+            mkdir -p $out
+            cp -r ./* $out/
+
+            # Create launcher
             mkdir -p $out/bin
             cat > $out/bin/svlangserver <<EOF
             #!${pkgs.bash}/bin/bash
-            exec ${pkgs.nodejs}/bin/node $out/lib/svlangserver/bin/main.js "\$@"
+            exec ${pkgs.nodejs}/bin/node $out/bin/main.js "$@"
+
             EOF
             chmod +x $out/bin/svlangserver
+
+            runHook postInstall
           '';
+
 
           meta = with pkgs.lib; {
             description = "SystemVerilog Language Server by IMC Trading";
