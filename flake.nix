@@ -10,18 +10,18 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        SHA256 = "sha256-lOIqKCSvgpVBZwUy49CeReK9e0dHWWV8hmD5BsUJlys=";
+        rev = "0e5d6b3bf96412f492efbc0d34957a662a1adb9e";
       in
       {
         packages.svlangserver = pkgs.buildNpmPackage {
           pname = "svlangserver";
-          version = "master";
+          version = rev;
 
           src = pkgs.fetchFromGitHub {
             owner = "imc-trading";
             repo  = "svlangserver";
-            rev = "master";
-            sha256 = "sha256-lOIqKCSvgpVBZwUy49CeReK9e0dHWWV8hmD5BsUJlys=";
+            inherit rev;
+            hash = "sha256-E39DIB4XTto3Fv6frgkIlSBIhROfatB9VOURpxBnUfc=";
           };
 
           npmDepsHash = "sha256-7j9TE1QkqymOWKjE1tSA8n9AJ2nSyjQoDq/8jptIPwY=";
@@ -71,6 +71,5 @@
         };
       });
 }
-
 
 
