@@ -48,7 +48,7 @@
             mkdir -p $out/bin
             cat > $out/bin/svlangserver <<EOF
             #!${pkgs.bash}/bin/bash
-            exec ${pkgs.nodejs}/bin/node $out/bin/main.js "$@"
+            exec ${pkgs.nodejs}/bin/node $out/bin/main.js "\$@"
 
             EOF
             chmod +x $out/bin/svlangserver
@@ -71,5 +71,4 @@
         };
       });
 }
-
 
